@@ -72,7 +72,6 @@ router.route("/delete/:id").delete(async (req, res)=>{
     }).catch((err)=>{
         console.log(err.message);
         res.status(500).send({status: "Error with delete ", eventerror: err.message});
-
     })
 })
 
@@ -87,16 +86,6 @@ router.route("/get/:id").get(async (req, res)=>{
     })
 })
 
-//get event by title
-/*router.route("/get/:title").get(async (req, res)=>{
-    let eventTitle = req.params.title;
-    const getEventDetails = await Event.findOne(eventTitle).then((event)=>{
-        res.status(200).send({status: "Event fetched", event});
-    }).catch((err)=>{
-        console.log(err.message);
-        res.status(500).send({status: "Error with get data'", error: err.message});
-    })
-})*/
 
 
 
