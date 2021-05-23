@@ -18,7 +18,7 @@ mongoose.connect(URL,{
     useUnifiedTopology: true,
     useFindAndModify: false
 });
-
+//mongodb connection
 const connection = mongoose.connection;
 connection.once("open", () => {
     console.log("Mongodb connection is success")
