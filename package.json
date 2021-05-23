@@ -1,23 +1,20 @@
 {
-  "name": "mernCRUD",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "cms",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Vihanga malshan",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "mongoose": "^5.12.10",
+    "nodemailer": "^6.6.0",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^2.0.7"
-  },
-  "devDependencies": {
-    "dotenv": "^9.0.2"
   }
 }
