@@ -85,4 +85,53 @@ router.route("/getproposalreviws/:id").get((req,res)=>{
     })
 
 })
+
+//update Proposal reviews details using Proposal id
+router.route("/updateProposalReview/:id").put(async(req,res)=>{
+
+    let proposalid = req.params.id;
+    const {reviwer_id, reviwer_name, proposal_id, proposal_topic, submiteremail, reviwe_date, reviwe_comment, status, reviwe_point} = req.body;
+
+    const updateProposalReviwe = {
+        reviwer_id,
+        reviwer_name,
+        proposal_id,
+        proposal_topic,
+        submiteremail,
+        reviwe_date,
+        reviwe_comment,
+        status,
+        reviwe_point
+    }
+
+    const update = await Proposalreviws.findByIdAndUpdate(proposalid, updateProposalReviwe)
+    .then(()=>{
+        let mailDetails = {
+            from: 'applicationframeworkproject@gmail.com',
+            to: updateProposalReviwe.submiteremail,
+            subject: 'Your Proposal Review Status Updated',
+            text: 'sir/madam,\n\n\n' 
+                    + "Your Research ID: " + updateProposalReviwe.research_id + " \n\n"
+                    + "Your Research Topic: " + updateProposalReviwe.research_topic + " \n\n"
+                    + "Review Status: " + updateProposalReviwe.status + " \n\n"
+                    + "Reviewer's comment: " + updateProposalReviwe.reviwe_comment + " \n\n"
+                    + "Reviewed by: " + updateProposalReviwe.reviwer_name + " \n\n\n"
+                     
+                    + "Thank you for submitting your proposal to THE SLIIT_ICMS!\n\n"                  
+                       
+        };
+        mailTransporter.sendMail(mailDetails, function(err, data) {
+            if(err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+            }
+        });
+        res.status(200).send({status: "Reviwer Updated"})
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({status: "Error with Updationg data"})
+    })
+
+})
 module.exports = router;

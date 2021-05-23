@@ -63,7 +63,7 @@ router.route("/add").post((req,res)=>{
 }) 
 
 //Get All The Research reviws.
-router.route("/getresearchreviws").get((req,res)=>{
+router.route("/getresearchreviwe").get((req,res)=>{
 
     Reseatchreviws.find().then((reseatchreviws)=>{
         res.json(reseatchreviws)
@@ -74,7 +74,7 @@ router.route("/getresearchreviws").get((req,res)=>{
 })
 
 //get Research review details using reviwer id
-router.route("/getresearchreviws/:id").get((req,res)=>{
+router.route("/getresearchreviwe/:id").get((req,res)=>{
 
     let researchid = req.params.id;
 
@@ -82,6 +82,55 @@ router.route("/getresearchreviws/:id").get((req,res)=>{
         res.json(reseatchreviws)
     }).catch((err)=>{
         console.log(err);
+    })
+
+})
+
+//update Research reviews details using resrarch id
+router.route("/updateResearchReview/:id").put(async(req,res)=>{
+
+    let researchid = req.params.id;
+    const {reviwer_id, reviwer_name, research_id, research_topic, submiteremail, reviwe_date, reviwe_comment, status, reviwe_point} = req.body;
+
+    const updateResearchReviwe = {
+        reviwer_id,
+        reviwer_name,
+        research_id,
+        research_topic,
+        submiteremail,
+        reviwe_date,
+        reviwe_comment,
+        status,
+        reviwe_point
+    }
+
+    const update = await Reseatchreviws.findByIdAndUpdate(researchid, updateResearchReviwe)
+    .then(()=>{
+        let mailDetails = {
+            from: 'applicationframeworkproject@gmail.com',
+            to: updateResearchReviwe.submiteremail,
+            subject: 'Your Research Review Status Updated',
+            text: 'sir/madam,\n\n\n' 
+                    + "Your Research ID: " + updateResearchReviwe.research_id + " \n\n"
+                    + "Your Research Topic: " + updateResearchReviwe.research_topic + " \n\n"
+                    + "Review Status: " + updateResearchReviwe.status + " \n\n"
+                    + "Reviewer's comment: " + updateResearchReviwe.reviwe_comment + " \n\n"
+                    + "Reviewed by: " + updateResearchReviwe.reviwer_name + " \n\n\n"
+                     
+                    + "Thank you for submitting your proposal to THE SLIIT_ICMS!\n\n"                  
+                       
+        };
+        mailTransporter.sendMail(mailDetails, function(err, data) {
+            if(err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+            }
+        });
+        res.status(200).send({status: "Reviwer Updated"})
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({status: "Error with Updationg data"})
     })
 
 })
