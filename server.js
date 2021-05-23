@@ -31,9 +31,11 @@ app.listen(PORT, ()=>{
 })
 
 const reviweRouter = require("./routes/reviwers.js");
+const researchreviweRouter = require("./routes/researchroute.js");
 const proposalreviweRouter = require("./routes/proposalroute.js");
 
 
 app.use("/reviwer",reviweRouter);
+app.use("/researchreviwe",researchreviweRouter);
 app.use("/proposalreviwe",proposalreviweRouter);
 

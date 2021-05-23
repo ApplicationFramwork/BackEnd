@@ -8,7 +8,19 @@ const researchReviewsSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    reviwer_name : {
+        type : String,
+        required : true
+    },
     research_id : {
+        type : String,
+        required : true
+    },
+    research_topic : {
+        type : String,
+        required : true
+    },
+    submiteremail : {
         type : String,
         required : true
     },

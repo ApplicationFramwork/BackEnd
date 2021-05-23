@@ -1,5 +1,5 @@
 const router = require("express").Router();
-let Proposalreviws = require("../models/proposalReviews");
+let Reseatchreviws = require("../models/researchReviews");
 const nodemailer = require('nodemailer');
 
 let mailTransporter = nodemailer.createTransport({
@@ -10,7 +10,7 @@ let mailTransporter = nodemailer.createTransport({
     }
 });
 
-//Add a new proposal reviwe
+//Add a new research reviwe
 router.route("/add").post((req,res)=>{
 
     const reviwer_id = req.body.reviwer_id;
@@ -23,11 +23,11 @@ router.route("/add").post((req,res)=>{
     const status = req.body.status;
     const reviwe_point = req.body.reviwe_point;
 
-    const newProposalreviws = new Proposalreviws({
+    const newResearchreviws = new Reseatchreviws({
         reviwer_id,
         reviwer_name,
-        proposal_id,
-        proposal_topic,
+        research_id,
+        research_topic,
         submiteremail,
         reviwe_date,
         reviwe_comment,
@@ -35,17 +35,17 @@ router.route("/add").post((req,res)=>{
         reviwe_point
     })
 
-    newProposalreviws.save().then(()=>{
+    newResearchreviws.save().then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
             to: newProposalreviws.submiteremail,
             subject: 'Your Proposal Review Status',
             text: 'sir/madam,\n\n\n' 
-                    + "Your Proposal ID: " + newProposalreviws.proposal_id + " \n\n"
-                    + "Your Proposal Topic: " + newProposalreviws.proposal_topic + " \n\n"
-                    + "Review Status: " + newProposalreviws.status + " \n\n"
-                    + "Reviewer's comment: " + newProposalreviws.reviwe_comment + " \n\n"
-                    + "Reviewed by: " + newProposalreviws.reviwer_name + " \n\n\n"
+                    + "Your Proposal ID: " + newResearchreviws.proposal_id + " \n\n"
+                    + "Your Proposal Topic: " + newResearchreviws.proposal_topic + " \n\n"
+                    + "Review Status: " + newResearchreviws.status + " \n\n"
+                    + "Reviewer's comment: " + newResearchreviws.reviwe_comment + " \n\n"
+                    + "Reviewed by: " + newResearchreviws.reviwer_name + " \n\n\n"
                      
                     + "Thank you for submitting your proposal to THE SLIIT_ICMS!\n\n"                  
         };
@@ -61,27 +61,4 @@ router.route("/add").post((req,res)=>{
         console.log(err);
     })
 }) 
-
-//Get All The Reviwer
-router.route("/getproposalreviws").get((req,res)=>{
-
-    Proposalreviws.find().then((proposalReviws)=>{
-        res.json(proposalReviws)
-    }).catch((err)=>{
-        console.log(err);
-    })
-
-})
-//get reviwer details using reviwer id
-router.route("/getreviwer/:id").get((req,res)=>{
-
-    let reviwerid = req.params.id;
-
-    Proposalreviws.findById(reviwerid).then((reviwer)=>{
-        res.json(reviwer)
-    }).catch((err)=>{
-        console.log(err);
-    })
-
-})
 module.exports = router;
