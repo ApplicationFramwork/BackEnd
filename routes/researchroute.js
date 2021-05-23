@@ -15,8 +15,8 @@ router.route("/add").post((req,res)=>{
 
     const reviwer_id = req.body.reviwer_id;
     const reviwer_name = req.body.reviwer_name;
-    const proposal_id = req.body.proposal_id;
-    const proposal_topic = req.body.proposal_topic;
+    const research_id = req.body.research_id;
+    const research_topic = req.body.research_topic;
     const submiteremail = req.body.submiteremail;
     const reviwe_date = new Date().toLocaleDateString();
     const reviwe_comment = req.body.reviwe_comment;
@@ -38,11 +38,11 @@ router.route("/add").post((req,res)=>{
     newResearchreviws.save().then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
-            to: newProposalreviws.submiteremail,
-            subject: 'Your Proposal Review Status',
+            to: newResearchreviws.submiteremail,
+            subject: 'Your Research Review Status',
             text: 'sir/madam,\n\n\n' 
-                    + "Your Proposal ID: " + newResearchreviws.proposal_id + " \n\n"
-                    + "Your Proposal Topic: " + newResearchreviws.proposal_topic + " \n\n"
+                    + "Your Research ID: " + newResearchreviws.proposal_id + " \n\n"
+                    + "Your Research Topic: " + newResearchreviws.proposal_topic + " \n\n"
                     + "Review Status: " + newResearchreviws.status + " \n\n"
                     + "Reviewer's comment: " + newResearchreviws.reviwe_comment + " \n\n"
                     + "Reviewed by: " + newResearchreviws.reviwer_name + " \n\n\n"
