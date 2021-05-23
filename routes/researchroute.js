@@ -127,7 +127,7 @@ router.route("/updateResearchReview/:id").put(async(req,res)=>{
                 console.log('Email sent successfully');
             }
         });
-        res.status(200).send({status: "Reviwer Updated"})
+        res.status(200).send({status: "research reviwe Updated"})
     }).catch((err)=>{
         console.log(err);
         res.status(500).send({status: "Error with Updationg data"})
