@@ -72,13 +72,14 @@ router.route("/getproposalreviws").get((req,res)=>{
     })
 
 })
-//get reviwer details using reviwer id
-router.route("/getreviwer/:id").get((req,res)=>{
 
-    let reviwerid = req.params.id;
+//get Proposal review details using proposal id
+router.route("/getproposalreviws/:id").get((req,res)=>{
 
-    Proposalreviws.findById(reviwerid).then((reviwer)=>{
-        res.json(reviwer)
+    let proposalid = req.params.id;
+
+    Proposalreviws.findById(proposalid).then((proposalReviws)=>{
+        res.json(proposalReviws)
     }).catch((err)=>{
         console.log(err);
     })

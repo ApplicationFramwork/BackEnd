@@ -61,4 +61,28 @@ router.route("/add").post((req,res)=>{
         console.log(err);
     })
 }) 
+
+//Get All The Research reviws.
+router.route("/getresearchreviws").get((req,res)=>{
+
+    Reseatchreviws.find().then((reseatchreviws)=>{
+        res.json(reseatchreviws)
+    }).catch((err)=>{
+        console.log(err);
+    })
+
+})
+
+//get Research review details using reviwer id
+router.route("/getresearchreviws/:id").get((req,res)=>{
+
+    let researchid = req.params.id;
+
+    Reseatchreviws.findById(researchid).then((reseatchreviws)=>{
+        res.json(reseatchreviws)
+    }).catch((err)=>{
+        console.log(err);
+    })
+
+})
 module.exports = router;
