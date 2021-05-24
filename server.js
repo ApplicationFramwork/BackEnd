@@ -2,15 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const server = express();
+const app = express();
 require("dotenv").config();
-const PORT = process.env.PORT || 8000;
 
-//server middleware
-server.use(cors());
-server.use(bodyParser.json());
+const PORT = 8070;
 
-const URL = process.env.MONGODB_URL;
+app.use(cors());
+app.use(bodyParser.json());
+
+const URL = 'mongodb+srv://E5115eAa:E5115eAa@cluster0.o7oez.mongodb.net/admin_db?retryWrites=true&w=majority';
 
 mongoose.connect(URL,{
     useCreateIndex: true,
@@ -23,11 +23,11 @@ const connection = mongoose.connection;
 connection.once("open", () => {
     console.log("Mongodb connection is success")
 })
-//import routes
-const eventRouter = require("./routes/events.js");
 
-server.use("/event",eventRouter);
+const UserRouter = require("./routes/users.js");
 
-server.listen(PORT, () => {
+app.use("/user",UserRouter);
+
+app.listen(PORT, () => {
     console.log(`Server is running on port number: ${PORT} `)
 })
