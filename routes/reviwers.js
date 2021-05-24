@@ -162,7 +162,7 @@ router.route("/delete/:id/:email").delete(async(req,res)=>{
             from: 'applicationframeworkproject@gmail.com',
             to: email,
             subject: 'YOU SUCCESSFULLY DELETED SLIIT-ICMS REVIWER ACCOUNT',
-            text: 'YOU SUCCESSFULLY DELETED ACCOUNT'    
+            text: 'YOU SUCCESSFULLY DELETED YOUR REVIWER ACCOUNT'    
         };
         mailTransporter.sendMail(mailDetails, function(err, data) {
             if(err) {
