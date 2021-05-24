@@ -26,7 +26,7 @@ router.route("/add").post((req,res)=>{
     newEvent.save().then(() =>{
         res.json("Event Added")
     }).catch((err)=>{
-        console.log(err);
+      console.log(err);
     })
 
 })
@@ -78,12 +78,17 @@ router.route("/delete/:id").delete(async (req, res)=>{
 //get event by ID
 router.route("/get/:id").get(async (req, res)=>{
     let eventId = req.params.id;
-    const eventDetails = await Event.findById(eventId).then((event)=>{
+        Event.findById(eventId).then((reviwer)=>{
+            res.json(reviwer)
+        }).catch((err)=>{
+            console.log(err);
+        })
+    /*const eventDetails = await Event.findById(eventId).then((event)=>{
         res.status(200).send({status: "Event fetched", event});
     }).catch((err)=>{
         console.log(err.message);
-        res.status(500).send({status: "Error with get data'", error: err.message});
-    })
+        res.status(500).send({status: "Error with get data'", error: err.message});*/
+
 })
 
 
