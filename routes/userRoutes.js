@@ -13,35 +13,28 @@ let mailTransporter = nodemailer.createTransport({
 //Add a new User
 router.route("/add").post((req,res)=>{
 
-    const first_name = req.body.first_name;
-    const last_name = req.body.last_name;
+   
     const email = req.body.email;
-    const number = req.body.number;
-    const number_Of_reviews = Number(req.body.number_Of_reviews);
     const type = req.body.type;
     const password = req.body.password;
 
-    const User = new User({
-        first_name,
-        last_name,
+    const user = new User({
         email,
-        number,
-        number_Of_reviews,
         type,
         password
     })
 
-    User.save().then(()=>{
+    user.save().then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
-            to: User.email,
-            subject: 'YOU SIGN UP AS' + User.type + 'IN SLIIT-ICMS',
-            text: 'Mr./Mrs. ' + User.first_name + ' ' + User.last_name + ",\n\n" 
+            to: user.email,
+            subject: 'YOU SIGN UP AS ' + user.type + ' IN SLIIT-ICMS',
+            text: 'Mr./Mrs.,\n\n' 
                     + "Congradulations!\n\n" 
-                    + 'Succesfully, You added as a' + user.type + 'in SLIIT_ICMS\n\n'
-                    + "You Email is " + User.email + " \n\n"
-                    + "You password is " + User.password + " \n\n"
-                    + "make sure after you loging update your password and profile details.\n\n"       
+                    + 'Succesfully, You added as a ' + user.type + ' in SLIIT_ICMS\n\n'
+                    + "You Email is " + user.email + " \n\n"
+                    + "You password is " + user.password + " \n\n"
+                    + "Thank You.\n\n"       
         };
         mailTransporter.sendMail(mailDetails, function(err, data) {
             if(err) {
