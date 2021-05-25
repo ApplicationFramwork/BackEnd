@@ -16,6 +16,7 @@ router.route("/add").post((req,res)=>{
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
     const email = req.body.email;
+    const number = req.body.number;
     const number_Of_reviews = Number(req.body.number_Of_reviews);
     const type = req.body.type;
     const password = req.body.password;
@@ -24,6 +25,7 @@ router.route("/add").post((req,res)=>{
         first_name,
         last_name,
         email,
+        number,
         number_Of_reviews,
         type,
         password
@@ -81,13 +83,13 @@ router.route("/getuser/:id").get((req,res)=>{
 router.route("/update/:id").put(async(req,res)=>{
 
     let userid = req.params.id;
-    const {first_name, last_name, email, number_Of_reviews, password} = req.body;
+    const {first_name, last_name, email, number, password} = req.body;
 
     const updateUser = {
         first_name,
         last_name,
         email,
-        number_Of_reviews,
+        number,
         password
     }
 
@@ -112,7 +114,7 @@ router.route("/update/:id").put(async(req,res)=>{
                 console.log('Email sent successfully');
             }
         });
-        res.status(200).send({status: "Reviwer Updated"})
+        res.status(200).send({status: "User Updated"})
     }).catch((err)=>{
         console.log(err);
         res.status(500).send({status: "Error with Updationg data"})
@@ -139,7 +141,7 @@ router.route("/delete/:id/:email").delete(async(req,res)=>{
                 console.log('Email sent successfully');
             }
         });
-        res.status(200).send({status: "Reviwer Deleted"})
+        res.status(200).send({status: "User Deleted"})
     }).catch((err)=>{
         console.log(err);
         res.status(500).send({status: "Error with deleting data"})
