@@ -124,23 +124,9 @@ router.route("/updatereviweNo/:id").put(async(req,res)=>{
 
     let reviwerid = req.params.id;
     const {number_Of_reviews} = req.body;
-    let type = ""
 
-    if(number_Of_reviews >= 10){
-        console.log("hello");
-        type == "PLATINUM";
-            if(number_Of_reviews >= 50){
-                console.log("hello2")
-                type == 'PLATINUM';
-            }
-    }
-    else{
-        type == 'G';
-        console.log("hello3");
-    }
     const updateReviwer = {
-        number_Of_reviews,
-        type
+        number_Of_reviews
     }
     const update = await Reviwer.findByIdAndUpdate(reviwerid, updateReviwer)
     .then(()=>{
