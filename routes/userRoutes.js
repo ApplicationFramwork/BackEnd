@@ -1,5 +1,5 @@
 const router = require("express").Router();
-let Reviwer = require("../models/reviwers");
+let User = require("../models/user");
 const nodemailer = require('nodemailer');
 
 let mailTransporter = nodemailer.createTransport({
@@ -10,33 +10,35 @@ let mailTransporter = nodemailer.createTransport({
     }
 });
 
-//Add a new Reviwer
+//Add a new User
 router.route("/add").post((req,res)=>{
 
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
     const email = req.body.email;
     const number_Of_reviews = Number(req.body.number_Of_reviews);
+    const type = req.body.type;
     const password = req.body.password;
 
-    const newReviwer = new Reviwer({
+    const User = new User({
         first_name,
         last_name,
         email,
         number_Of_reviews,
+        type,
         password
     })
 
-    newReviwer.save().then(()=>{
+    User.save().then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
-            to: newReviwer.email,
-            subject: 'YOU ADDED AS A REVIWER IN SLIIT-ICMS',
-            text: 'Mr./Mrs. ' + newReviwer.first_name + ' ' + newReviwer.last_name + ",\n\n" 
+            to: User.email,
+            subject: 'YOU SIGN UP AS' + User.type + 'IN SLIIT-ICMS',
+            text: 'Mr./Mrs. ' + User.first_name + ' ' + User.last_name + ",\n\n" 
                     + "Congradulations!\n\n" 
-                    + "Succesfully, You added as a reviwer in SLIIT_ICMS\n\n"
-                    + "You email is " + newReviwer.email + " \n\n"
-                    + "You password is " + newReviwer.password + " \n\n"
+                    + 'Succesfully, You added as a' + user.type + 'in SLIIT_ICMS\n\n'
+                    + "You Email is " + User.email + " \n\n"
+                    + "You password is " + User.password + " \n\n"
                     + "make sure after you loging update your password and profile details.\n\n"       
         };
         mailTransporter.sendMail(mailDetails, function(err, data) {
@@ -46,43 +48,42 @@ router.route("/add").post((req,res)=>{
                 console.log('Email sent successfully');
             }
         });
-        res.json("Reviwer Added")
+        res.json("User Added")
     }).catch((err)=>{
         console.log(err);
     })
 }) 
+//Get All The Users
+router.route("/getallusers").get((req,res)=>{
 
-//Get All The Reviwer
-router.route("/getallreviwers").get((req,res)=>{
-
-    Reviwer.find().then((reviwers)=>{
-        res.json(reviwers)
+    User.find().then((users)=>{
+        res.json(users)
     }).catch((err)=>{
         console.log(err);
     })
 
 })
 
-//get reviwer details using reviwer id
-router.route("/getreviwer/:id").get((req,res)=>{
+//get user details using user id
+router.route("/getuser/:id").get((req,res)=>{
 
-    let reviwerid = req.params.id;
+    let userid = req.params.id;
 
-    Reviwer.findById(reviwerid).then((reviwer)=>{
-        res.json(reviwer)
+    User.findById(reviwerid).then((user)=>{
+        res.json(user)
     }).catch((err)=>{
         console.log(err);
     })
 
 })
 
-//update reviwer details using reviwer id
+//update User details using User id
 router.route("/update/:id").put(async(req,res)=>{
 
-    let reviwerid = req.params.id;
+    let userid = req.params.id;
     const {first_name, last_name, email, number_Of_reviews, password} = req.body;
 
-    const updateReviwer = {
+    const updateUser = {
         first_name,
         last_name,
         email,
@@ -90,17 +91,18 @@ router.route("/update/:id").put(async(req,res)=>{
         password
     }
 
-    const update = await Reviwer.findByIdAndUpdate(reviwerid, updateReviwer)
+    const update = await User.findByIdAndUpdate(userid, updateUser)
     .then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
-            to: updateReviwer.email,
-            subject: 'YOU SUCCESSFULLY UPDATED SLIIT-ICMS REVIWER ACCOUNT',
-            text: 'Mr./Mrs. ' + updateReviwer.first_name + ' ' + updateReviwer.last_name + ",\n\n"
+            to: updateUser.email,
+            subject: 'YOU SUCCESSFULLY UPDATED SLIIT-ICMS ACCOUNT',
+            text: 'Mr./Mrs. ' + updateUser.first_name + ' ' + updateUser.last_name + ",\n\n"
                     + "Sir/madam,\n\n"
                     + "You successfully updated your account!\n\n"
-                    + "If you didn't update your account make reupdate your account using below password.\n\n"    
-                    + "You password is " + updateReviwer.password + " \n\n"
+                    + "If you didn't update your account make reupdate your account using below password.\n\n" 
+                    + "You password is " + updateUser.email + " \n\n"   
+                    + "You password is " + updateUser.password + " \n\n"
                        
         };
         mailTransporter.sendMail(mailDetails, function(err, data) {
@@ -117,36 +119,18 @@ router.route("/update/:id").put(async(req,res)=>{
     })
 
 })
-//update reviwe number and reviwer type
-router.route("/updatereviweNo/:id").put(async(req,res)=>{
-
-    let reviwerid = req.params.id;
-    const {number_Of_reviews} = req.body;
-
-    const updateReviwer = {
-        number_Of_reviews
-    }
-    const update = await Reviwer.findByIdAndUpdate(reviwerid, updateReviwer)
-    .then(()=>{
-        console.log(type)
-        res.status(200).send({status: "Reviwer Updated"})
-    }).catch((err)=>{
-        console.log(err);
-        res.status(500).send({status: "Error with Updationg data"})
-    })
-})
 //delete the reviwer
 router.route("/delete/:id/:email").delete(async(req,res)=>{
-    let reviwerid = req.params.id;
+    let userid = req.params.id;
     let email = req.params.email;
 
-    await Reviwer.findByIdAndDelete(reviwerid)
+    await User.findByIdAndDelete(userid)
     .then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
             to: email,
-            subject: 'YOU SUCCESSFULLY DELETED SLIIT-ICMS REVIWER ACCOUNT',
-            text: 'YOU SUCCESSFULLY DELETED YOUR REVIWER ACCOUNT'    
+            subject: 'YOU SUCCESSFULLY DELETED SLIIT-ICMS ACCOUNT',
+            text: 'YOU SUCCESSFULLY DELETED YOUR ACCOUNT'    
         };
         mailTransporter.sendMail(mailDetails, function(err, data) {
             if(err) {
@@ -161,6 +145,4 @@ router.route("/delete/:id/:email").delete(async(req,res)=>{
         res.status(500).send({status: "Error with deleting data"})
     })
 })
-
-
 module.exports = router;

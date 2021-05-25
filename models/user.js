@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.schema;
 
-const reviwerSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
 
     first_name : {
         type : String,
@@ -16,16 +16,16 @@ const reviwerSchema = new mongoose.Schema({
         type : String,
         required : true
     },
-    number_Of_reviews : {
-        type : Number,
+    type : {
+        type : String,
         required : true
     },
     password : {
         type : String,
         required : true
     }
+
 })
+const user = mongoose.model("User", userSchema);
 
-const Reviwer = mongoose.model("Reviwer", reviwerSchema);
-
-module.exports = Reviwer; 
+module.exports = user; 
