@@ -6,9 +6,11 @@ const addResearch = new mongoose.Schema({
 
         research_name : {
             type : String,
+            required : true
         },
-        research_doc : {
+        research_description: {
             type : String,
+            required : true
         }
 
 })
