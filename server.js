@@ -25,8 +25,10 @@ connection.once("open", () => {
 })
 //import routes
 const eventRouter = require("./routes/events.js");
+const workshopRouter = require("./routes/workshops.js");
 
 server.use("/event",eventRouter);
+server.use("/workshop",workshopRouter);
 
 server.listen(PORT, () => {
     console.log(`Server is running on port number: ${PORT} `)

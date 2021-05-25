@@ -1,5 +1,5 @@
 const router = require("express").Router();
-let Event = require("../models/Event");
+let Workshop = require("../models/Workshop");
 
 //add a new event
 router.route("/add").post((req,res)=>{
@@ -12,7 +12,7 @@ router.route("/add").post((req,res)=>{
     const organizedBy = req.body.organizedBy;
     const eventStatus = req.body.eventStatus;
 
-    const newEvent = new Event({
+    const newWorkshop = new Workshop({
         title,
         eventType,
         description,
@@ -23,17 +23,17 @@ router.route("/add").post((req,res)=>{
         eventStatus
     })
 
-    newEvent.save().then(() =>{
+    newWorkshop.save().then(() =>{
         res.json("Event Added")
     }).catch((err)=>{
-      console.log(err);
+        console.log(err);
     })
 
 })
-//get all events
+//get all workshops
 router.route("/").get((req,res)=>{
-    Event.find().then((events =>{
-        res.json(events)
+    Workshop.find().then((workshops =>{
+        res.json(workshops)
     })).catch((err)=>{
         console.log(err)
     })
@@ -41,10 +41,10 @@ router.route("/").get((req,res)=>{
 
 //update events
 router.route("/update/:id").put(async (req, res)=>{
-    let eventId = req.params.id;
+    let workshopId = req.params.id;
     const {title, eventType, description, startDate, duration, venue, organizedBy,eventStatus} = req.body;
 
-    const updateEvent = {
+    const updateWorkshop = {
         title,
         eventType,
         description,
@@ -54,7 +54,7 @@ router.route("/update/:id").put(async (req, res)=>{
         organizedBy,
         eventStatus
     }
-    const update = await Event.findByIdAndUpdate(eventId, updateEvent).then(()=> {
+    const update = await Workshop.findByIdAndUpdate(workshopId, updateWorkshop).then(()=> {
         res.status(200).send({status: "Event updated"})
     }).catch((err)=>{
         console.log(err);
@@ -65,25 +65,25 @@ router.route("/update/:id").put(async (req, res)=>{
 })
 //delete an event
 router.route("/delete/:id").delete(async (req, res)=>{
-    let eventId = req.params.id;
+    let workshopId = req.params.id;
 
-    await Event.findByIdAndDelete(eventId).then(()=>{
+    await Workshop.findByIdAndDelete(workshopId).then(()=>{
         res.status(200).send({status: "Event deleted"});
     }).catch((err)=>{
         console.log(err.message);
-        res.status(500).send({status: "Error with delete ", eventerror: err.message});
+        res.status(500).send({status: "Error with delete ", workshoperror: err.message});
     })
 })
 
 
 //get event by ID
-router.route("/get/:id").get(async (req, res)=>{
-    let eventId = req.params.id;
-        Event.findById(eventId).then((editor)=>{
-            res.json(editor)
-        }).catch((err)=>{
-            console.log(err);
-        })
+router.route("/existingWorkshop/:id").get(async (req, res)=>{
+    let workshopId = req.params.id;
+    Workshop.findById(workshopId).then((editor)=>{
+        res.json(editor)
+    }).catch((err)=>{
+        console.log(err);
+    })
     /*const eventDetails = await Event.findById(eventId).then((event)=>{
         res.status(200).send({status: "Event fetched", event});
     }).catch((err)=>{
@@ -94,8 +94,8 @@ router.route("/get/:id").get(async (req, res)=>{
 
 //get all conference events
 router.route("/").get((req,res)=>{
-    Event.find().then((events =>{
-        res.json(events)
+    Workshop.find().then((workshops =>{
+        res.json(workshops)
     })).catch((err)=>{
         console.log(err)
     })
