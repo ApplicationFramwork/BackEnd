@@ -75,7 +75,6 @@ router.route("/delete/:id").delete(async (req, res)=>{
     })
 })
 
-
 //get event by ID
 router.route("/existingWorkshop/:id").get(async (req, res)=>{
     let workshopId = req.params.id;
@@ -89,7 +88,6 @@ router.route("/existingWorkshop/:id").get(async (req, res)=>{
     }).catch((err)=>{
         console.log(err.message);
         res.status(500).send({status: "Error with get data'", error: err.message});*/
-
 })
 
 //get all conference events
