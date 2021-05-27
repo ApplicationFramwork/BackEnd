@@ -12,8 +12,7 @@ const userSchema = new Schema({
         required : true
     },
     user_name :{
-        type : String,
-        required : true
+        type : String
     },
     password:{
         type : String,
@@ -24,8 +23,7 @@ const userSchema = new Schema({
         required : true
     },
     mobile_number:{
-        type : String,
-        required : true
+        type : String
     }
 });
 const User = mongoose.model("User",userSchema);

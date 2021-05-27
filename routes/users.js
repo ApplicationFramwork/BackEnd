@@ -2,6 +2,7 @@ const router = require("express").Router();
 let User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = 'dseiow985344he02-238hfsdy22@@@sdtjerltmdjdguot';
+const multer = require('multer');
 
 //Add users api
 router.route("/add").post((req,res)=>{
@@ -95,10 +96,33 @@ router.route("/login").post(async (req,res )=>{
     }
     const token = jwt.sign({
             id : user._id,
-            name : user.name
+            name : user.name,
+            user_role : user.type,
+            email : user.email,
+            mobile : user.mobile_number
         },JWT_SECRET
 
     )
-    return res.json({status : 'ok' , data : token})
+    return res.json({status : 'ok' , token : token})
 })
+
+//image upload
+const storage = multer.diskStorage({
+    //destination for files
+    destination: function (request, file, callback){
+        callback(null,'../uploads/images')
+    },
+    filename : function (request, file, callback){
+        callback(null, Date.now() + file.originalname);
+    },
+});
+//uploads parameters for multer
+const upload = multer({
+    storage:storage,
+    limits:{
+        fieldSize : 1024 * 1024 * 3,
+    },
+});
+
+
 module.exports = router;
