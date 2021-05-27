@@ -1,12 +1,15 @@
 const router = require("express").Router();
 let User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = 'dseiow985344he02-238hfsdy22@@@sdtjerltmdjdguot';
 
+//Add users api
 router.route("/add").post((req,res)=>{
     const name = req.body.name;
     const email = req.body.email;
     const user_name = req.body.user_name;
     const password = req.body.password;
-    const user_role = req.body.user_role;
+    const type = req.body.type;
     const mobile_number = req.body.mobile_number;
 
     const newUser = new User({
@@ -14,7 +17,7 @@ router.route("/add").post((req,res)=>{
         email,
         user_name,
         password,
-        user_role,
+        type,
         mobile_number
     })
 
@@ -26,6 +29,7 @@ router.route("/add").post((req,res)=>{
 
 })
 
+//get all users
 router.route("/").get((req,res)=>{
     User.find().then((user =>{
         res.json(user)
@@ -34,15 +38,16 @@ router.route("/").get((req,res)=>{
     })
 })
 
+//update user details
 router.route("/update/:id").put(async (req, res)=>{
     let userId = req.params.id;
-    const {name, email, user_name,user_role,mobile_number} = req.body;
+    const {name, email, user_name,type,mobile_number} = req.body;
 
     const updateUser = {
         name,
         email,
         user_name,
-        user_role,
+        type,
         mobile_number
     }
     const update = await User.findByIdAndUpdate(userId, updateUser).then(()=> {
@@ -55,6 +60,8 @@ router.route("/update/:id").put(async (req, res)=>{
 
 })
 
+
+//delete an user
 router.route("/delete/:id").delete(async (req, res)=>{
     let userId = req.params.id;
 
@@ -67,6 +74,8 @@ router.route("/delete/:id").delete(async (req, res)=>{
     })
 })
 
+
+//get user by Id
 router.route("/get/:id").get(async (req, res)=>{
     let userId = req.params.id;
     const user = await User.findById(userId).then((user)=>{
@@ -77,4 +86,19 @@ router.route("/get/:id").get(async (req, res)=>{
     })
 })
 
+router.route("/login").post(async (req,res )=>{
+    const {email , password} = req.body;
+    const user = await User.findOne({email,password}).lean();
+
+    if(!user){
+        return res.json({status : 'error', error: 'Invalid username/password'});
+    }
+    const token = jwt.sign({
+            id : user._id,
+            name : user.name
+        },JWT_SECRET
+
+    )
+    return res.json({status : 'ok' , data : token})
+})
 module.exports = router;
