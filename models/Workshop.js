@@ -5,35 +5,35 @@ const Schema = mongoose.Schema;
 const workshopSchema = new Schema({
     title : {
         type : String,
-        required: true
+        required: false
     },
     eventType : {
         type : String,
-        required: true
+        required: false
     },
     description : {
         type : String,
-        required: true
+        required: false
     },
     startDate : {
         type : String,
-        required: true
+        required: false
     },
     duration : {
         type : String,
-        required: true
+        required: false
     },
     venue : {
         type : String,
-        required: true
+        required: false
     },
     organizedBy : {
         type : String,
-        required: true
+        required: false
     },
     eventStatus : {
         type : String,
-        required: true
+        required: false
     }
 
 })
