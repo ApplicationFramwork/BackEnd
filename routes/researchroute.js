@@ -86,6 +86,17 @@ router.route("/getresearchreviwe/:id").get((req,res)=>{
 
 })
 
+// get research review details using status
+router.route("/getresearch/:status").get((req,res)=>{
+    let status = req.params.status;
+
+    Reseatchreviws.find({status : status}).then((researchreviws)=>{
+        res.json(researchreviws)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
+
 //update Research reviews details using resrarch id
 router.route("/updateResearchReview/:id").put(async(req,res)=>{
 

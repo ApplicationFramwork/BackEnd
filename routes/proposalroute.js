@@ -72,6 +72,16 @@ router.route("/getproposalreviws").get((req,res)=>{
     })
 
 })
+// get research review details using status
+router.route("/getproposal/:status").get((req,res)=>{
+    let status = req.params.status;
+
+    Reseatchreviws.find({status : status}).then((proposalReviws)=>{
+        res.json(proposalReviws)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
 
 //get Proposal review details using proposal id
 router.route("/getproposalreviws/:id").get((req,res)=>{
