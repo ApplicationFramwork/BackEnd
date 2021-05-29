@@ -9,7 +9,7 @@ const app = express();
 const User = require("./models/User");
 require("dotenv").config();
 
-const PORT = 8070;
+const PORT = 8090;
 
 app.use(cors());
 app.use(bodyParser.json());
