@@ -1,6 +1,8 @@
 const router = require("express").Router();
 let User = require("../models/user");
 const nodemailer = require('nodemailer');
+const path = require('path');
+const multer = require('multer');
 
 let mailTransporter = nodemailer.createTransport({
     service: 'gmail',
@@ -10,18 +12,43 @@ let mailTransporter = nodemailer.createTransport({
     }
 });
 
-//Add a new User
-router.route("/add").post((req,res)=>{
+var storage = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,'uploads');
+    },
+    filename:function(req,file,cb){
+        // cb(null,file.filename + '-' + Date.now() + path.extname(file.originalname))
 
-   
+        console.log(file.originalname);
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0');
+        let yyyy = today.getFullYear();
+        const fileExt = path.extname(file.originalname);
+        const fileText = Date.now() + "-" + file.originalname + "-" + dd + "-" + mm + "-" + yyyy + fileExt;
+        cb(null, fileText);
+    }
+})
+
+var upload = multer({
+    storage : storage
+})
+
+//Add a new User
+router.route("/add").post(upload.single('document'),(req,res)=>{
+
+    
     const email = req.body.email;
     const type = req.body.type;
     const password = req.body.password;
+    const document = req.file.filename;
+    // adImageUrl = req.files.banner[0].path.replace(/\\/g, '/');
 
     const user = new User({
         email,
         type,
-        password
+        password,
+        document
     })
 
     user.save().then(()=>{
