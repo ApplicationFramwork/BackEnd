@@ -41,7 +41,7 @@ router.route("/add").post(upload.single('document'),(req,res)=>{
     const email = req.body.email;
     const type = req.body.type;
     const password = req.body.password;
-    const document = req.file.filename;
+    const document = req.file.document;
     // adImageUrl = req.files.banner[0].path.replace(/\\/g, '/');
 
     const user = new User({
