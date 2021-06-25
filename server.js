@@ -35,10 +35,14 @@ const researchreviweRouter = require("./routes/researchroute.js");
 const proposalreviweRouter = require("./routes/proposalroute.js");
 const addresearchRouter = require("./routes/AddResearchroute.js");
 const addUserRouter = require("./routes/userRoutes");
+const researchdocroutes = require("./routes/researchdetailsroute");
+const proposaldocroutes = require("./routes/proposaldetailsroute");
 
 app.use("/reviwer",reviweRouter);
 app.use("/researchreviwe",researchreviweRouter);
 app.use("/proposalreviwe",proposalreviweRouter);
 app.use("/addresearch",addresearchRouter);
-app.use("/user",addUserRouter);
+app.use("/user", addUserRouter);
+app.use("/researchdoc", researchdocroutes);
+app.use("/proposaldoc", proposaldocroutes);
 
