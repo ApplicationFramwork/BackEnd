@@ -19,7 +19,7 @@ var storage = multer.diskStorage({
         cb(null,'uploads');
     },
     filename:function(req,file,cb){
-        // cb(null,file.filename + '-' + Date.now() + path.extname(file.originalname))
+        
 
         console.log(file.originalname);
         let today = new Date();
@@ -91,7 +91,7 @@ router.route("/addresearcher").post(upload.single('document'), (req, res) => {
     })
 })
 //Add a new Workshop_Presenter
-router.route("/addWorkshop_presenter").post(upload.single('document'),(req,res)=>{
+router.route("/addWorkshoppresenter").post(upload.single('document'),(req,res)=>{
     const email = req.body.email;
     const type = req.body.type;
     const password = req.body.password;
