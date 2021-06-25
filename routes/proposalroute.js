@@ -65,7 +65,8 @@ router.route("/add").post((req,res)=>{
 //Get All The Reviwer
 router.route("/getproposalreviws").get((req,res)=>{
 
-    Proposalreviws.find().then((proposalReviws)=>{
+    Proposalreviws.find().populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
+        .then((proposalReviws) => {
         res.json(proposalReviws)
     }).catch((err)=>{
         console.log(err);
@@ -76,7 +77,8 @@ router.route("/getproposalreviws").get((req,res)=>{
 router.route("/getproposal/:status").get((req,res)=>{
     let status = req.params.status;
 
-    Reseatchreviws.find({status : status}).then((proposalReviws)=>{
+    Reseatchreviws.find({ status: status }).populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
+        .then((proposalReviws) => {
         res.json(proposalReviws)
     }).catch((err)=>{
         console.log(err);
@@ -88,7 +90,8 @@ router.route("/getproposalreviws/:id").get((req,res)=>{
 
     let proposalid = req.params.id;
 
-    Proposalreviws.findById(proposalid).then((proposalReviws)=>{
+    Proposalreviws.findById(proposalid).populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
+        .then((proposalReviws) => {
         res.json(proposalReviws)
     }).catch((err)=>{
         console.log(err);

@@ -65,7 +65,8 @@ router.route("/add").post((req,res)=>{
 //Get All The Research reviws.
 router.route("/getresearchreviwe").get((req,res)=>{
 
-    Reseatchreviws.find().then((reseatchreviws)=>{
+    Reseatchreviws.find().populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
+        .then((reseatchreviws) => {
         res.json(reseatchreviws)
     }).catch((err)=>{
         console.log(err);
@@ -78,7 +79,8 @@ router.route("/getresearchreviwe/:id").get((req,res)=>{
 
     let researchid = req.params.id;
 
-    Reseatchreviws.findById(researchid).then((reseatchreviws)=>{
+    Reseatchreviws.findById(researchid).populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
+    .then((reseatchreviws)=>{
         res.json(reseatchreviws)
     }).catch((err)=>{
         console.log(err);
@@ -90,7 +92,8 @@ router.route("/getresearchreviwe/:id").get((req,res)=>{
 router.route("/getresearch/:status").get((req,res)=>{
     let status = req.params.status;
 
-    Reseatchreviws.find({status : status}).then((researchreviws)=>{
+    Reseatchreviws.find({ status: status }).populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
+        .then((researchreviws) => {
         res.json(researchreviws)
     }).catch((err)=>{
         console.log(err);

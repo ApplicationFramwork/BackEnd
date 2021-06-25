@@ -1,5 +1,7 @@
 const router = require("express").Router();
 let User = require("../models/user");
+let proposalDocument = require('../models/proposaldetails')
+let researchlDocument = require('../models/researchdetails')
 const nodemailer = require('nodemailer');
 const path = require('path');
 const multer = require('multer');
@@ -33,24 +35,93 @@ var storage = multer.diskStorage({
 var upload = multer({
     storage : storage
 })
-
-//Add a new User
-router.route("/add").post(upload.single('document'),(req,res)=>{
-
-    
+//add new researcher
+router.route("/addresearcher").post(upload.single('document'), (req, res) => {
     const email = req.body.email;
     const type = req.body.type;
     const password = req.body.password;
+
+    const research_topic = 'New Researcher';
+    const submiteremail = req.body.email;
+    const reseach_description = 'New Research Papers';
     const document = req.file.filename;
-    // adImageUrl = req.files.banner[0].path.replace(/\\/g, '/');
+    const status = 'Pending';
+    const total_reviwe_point = 0;
+
+    const researchdoc = new researchlDocument({
+        research_topic,
+        submiteremail,
+        reseach_description,
+        document,
+        status,
+        total_reviwe_point
+    })
+    researchdoc.save().then(() => {
+        res.json("New research paper Added")
+    }).catch((err) => {
+        console.log(err);
+    })
 
     const user = new User({
         email,
         type,
-        password,
-        document
+        password
+    })
+    user.save().then(() => {
+        let mailDetails = {
+            from: 'applicationframeworkproject@gmail.com',
+            to: user.email,
+            subject: 'YOU SIGN UP AS ' + user.type + ' IN SLIIT-ICMS',
+            text: 'Mr./Mrs.,\n\n'
+                + "Congradulations!\n\n"
+                + 'Succesfully, You added as a ' + user.type + ' in SLIIT_ICMS\n\n'
+                + "You Email is " + user.email + " \n\n"
+                + "You password is " + user.password + " \n\n"
+                + "Thank You.\n\n"
+        };
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+            }
+        });
+    }).catch((err) => {
+        console.log(err);
+    })
+})
+//Add a new Workshop_Presenter
+router.route("/addWorkshop_presenter").post(upload.single('document'),(req,res)=>{
+    const email = req.body.email;
+    const type = req.body.type;
+    const password = req.body.password;
+
+    const proposal_topic = 'New Workshop Presenter';
+    const submiteremail = req.body.email;
+    const proposal_description = 'New Work shop proposal';
+    const document = req.file.filename;
+    const status = 'Pending';
+    const total_reviwe_point = 0;
+
+    const proposaldoc = new proposalDocument({
+        proposal_topic,
+        submiteremail,
+        proposal_description,
+        document,
+        status,
+        total_reviwe_point
+    })
+    proposaldoc.save().then(() => {
+        res.json("New workshop proposal Added")
+    }).catch((err) => {
+        console.log(err);
     })
 
+    const user = new User({
+        email,
+        type,
+        password
+    })
     user.save().then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
@@ -70,11 +141,45 @@ router.route("/add").post(upload.single('document'),(req,res)=>{
                 console.log('Email sent successfully');
             }
         });
-        res.json("User Added")
     }).catch((err)=>{
         console.log(err);
     })
-}) 
+})
+//Add a new attende
+router.route("/addattende").post(upload.single('document'), (req, res) => {
+    const email = req.body.email;
+    const type = req.body.type;
+    const password = req.body.password;
+
+    const user = new User({
+        email,
+        type,
+        password
+    })
+    user.save().then(() => {
+        let mailDetails = {
+            from: 'applicationframeworkproject@gmail.com',
+            to: user.email,
+            subject: 'YOU SIGN UP AS ' + user.type + ' IN SLIIT-ICMS',
+            text: 'Mr./Mrs.,\n\n'
+                + "Congradulations!\n\n"
+                + 'Succesfully, You added as a ' + user.type + ' in SLIIT_ICMS\n\n'
+                + "You Email is " + user.email + " \n\n"
+                + "You password is " + user.password + " \n\n"
+                + "Thank You.\n\n"
+        };
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+            }
+        });
+        res.json("User Added")
+    }).catch((err) => {
+        console.log(err);
+    })
+})
 //Get All The Users
 router.route("/getallusers").get((req,res)=>{
 

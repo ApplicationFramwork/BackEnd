@@ -4,30 +4,17 @@ const schema = mongoose.schema;
 
 const researchReviewsSchema = new mongoose.Schema({
 
-    reviwer_id : {
-        type : String,
-        required : true
-    },
-    reviwer_name : {
-        type : String,
-        required : true
-    },
-    research_id : {
-        type : String,
-        required : true
-    },
-    research_topic : {
-        type : String,
-        required : true
-    },
-    submiteremail : {
-        type : String,
-        required : true
-    },
-    reviwe_date : {
-        type : Date,
-        required : true
-    },
+
+    research_id: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: 'Research_Details'
+    }],
+    reviwer_id: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: 'Reviwer'
+    }],
     reviwe_comment : {
         type : String,
         required : true
