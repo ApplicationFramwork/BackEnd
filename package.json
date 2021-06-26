@@ -13,12 +13,6 @@
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "mongoose": "^5.12.10",
-<<<<<<< HEAD
-    "multer": "^1.4.2",
-    "nodemailer": "^6.6.0",
-    "nodemailer-sendgrid-transport": "^0.2.0",
-    "nodemon": "^2.0.7"
-=======
     "nodemon": "^2.0.7",
     "multer": "^1.4.2",
     "nodemailer": "^6.6.0",
@@ -26,6 +20,5 @@
   },
   "devDependencies": {
     "dotenv": "^9.0.2"
->>>>>>> b8a665f534fc635670b2f9575a021781d8949729
   }
 }

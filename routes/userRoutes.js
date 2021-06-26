@@ -1,10 +1,7 @@
 const router = require("express").Router();
 let User = require("../models/user");
-<<<<<<< HEAD
-=======
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = 'dseiow985344he02-238hfsdy22@@@sdtjerltmdjdguot';
->>>>>>> b8a665f534fc635670b2f9575a021781d8949729
 let proposalDocument = require('../models/proposaldetails')
 let researchlDocument = require('../models/researchdetails')
 const nodemailer = require('nodemailer');
@@ -276,8 +273,6 @@ router.route("/delete/:id/:email").delete(async(req,res)=>{
         res.status(500).send({status: "Error with deleting data"})
     })
 })
-<<<<<<< HEAD
-=======
 //get all users
 router.route("/").get((req,res)=>{
     User.find().then((user =>{
@@ -355,5 +350,4 @@ router.route("/login").post(async (req,res )=>{
     return res.json({status : 'ok' , token : token})
 })
 
->>>>>>> b8a665f534fc635670b2f9575a021781d8949729
 module.exports = router;
