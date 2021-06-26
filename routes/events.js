@@ -100,7 +100,24 @@ router.route("/").get((req,res)=>{
         console.log(err)
     })
 })
-
+//get all confirmed events
+router.route("/getConfirmed").get((req,res)=>{
+    let status = "Confirmed";
+    Event.find({eventStatus : status}).then((events)=>{
+        res.json(events)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
+//get event by status
+router.route("/getEvents/:status").get((req,res)=>{
+    let status = req.params.status;
+    Event.find({eventStatus : status}).then((events)=>{
+        res.json(events)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
 
 
 

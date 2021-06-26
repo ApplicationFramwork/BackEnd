@@ -27,8 +27,22 @@ connection.once("open", () => {
 const eventRouter = require("./routes/events.js");
 const workshopRouter = require("./routes/workshops.js");
 
+const reviweRouter = require("./routes/reviwers.js");
+const researchreviweRouter = require("./routes/researchroute.js");
+const proposalreviweRouter = require("./routes/proposalroute.js");
+const addUserRouter = require("./routes/userRoutes");
+const researchdocroutes = require("./routes/researchdetailsroute");
+const proposaldocroutes = require("./routes/proposaldetailsroute");
+
 server.use("/event",eventRouter);
 server.use("/workshop",workshopRouter);
+
+server.use("/reviwer",reviweRouter);
+server.use("/researchreviwe",researchreviweRouter);
+server.use("/proposalreviwe",proposalreviweRouter);
+server.use("/user", addUserRouter);
+server.use("/researchdoc", researchdocroutes);
+server.use("/proposaldoc", proposaldocroutes);
 
 server.listen(PORT, () => {
     console.log(`Server is running on port number: ${PORT} `)

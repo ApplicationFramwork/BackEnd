@@ -98,9 +98,34 @@ router.route("/").get((req,res)=>{
         console.log(err)
     })
 })
+//get conference by title
+/*router.route("/find").post(async(req,res)=>{
+    const {eventType} =req.body;
+    const workshops =await Workshop.find({eventType}).lean();
+    if(!workshops){
+        return res.json({status : 'error', error: 'Invalid Type'});
+    }else{
+        res.json(workshops);
+    }
+})*/
 
-
-
-
+//get confirmed events
+router.route("/getConfirmed").get((req,res)=>{
+    let status = "Confirmed";
+    Workshop.find({eventStatus : status}).then((workshops)=>{
+        res.json(workshops)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
+//get event by status
+router.route("/getEvents/:status").get((req,res)=>{
+    let status = req.params.status;
+    Workshop.find({eventStatus : status}).then((events)=>{
+        res.json(events)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
 
 module.exports = router;
