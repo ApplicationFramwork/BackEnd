@@ -26,7 +26,7 @@ router.route("/add").post((req,res)=>{
     newEvent.save().then(() =>{
         res.json("Event Added")
     }).catch((err)=>{
-        console.log(err);
+      console.log(err);
     })
 
 })
@@ -72,31 +72,53 @@ router.route("/delete/:id").delete(async (req, res)=>{
     }).catch((err)=>{
         console.log(err.message);
         res.status(500).send({status: "Error with delete ", eventerror: err.message});
-
     })
 })
+
 
 //get event by ID
 router.route("/get/:id").get(async (req, res)=>{
     let eventId = req.params.id;
-    const eventDetails = await Event.findById(eventId).then((event)=>{
+        Event.findById(eventId).then((editor)=>{
+            res.json(editor)
+        }).catch((err)=>{
+            console.log(err);
+        })
+    /*const eventDetails = await Event.findById(eventId).then((event)=>{
         res.status(200).send({status: "Event fetched", event});
     }).catch((err)=>{
         console.log(err.message);
-        res.status(500).send({status: "Error with get data'", error: err.message});
+        res.status(500).send({status: "Error with get data'", error: err.message});*/
+
+})
+
+//get all conference events
+router.route("/").get((req,res)=>{
+    Event.find().then((events =>{
+        res.json(events)
+    })).catch((err)=>{
+        console.log(err)
+    })
+})
+//get all confirmed events
+router.route("/getConfirmed").get((req,res)=>{
+    let status = "Confirmed";
+    Event.find({eventStatus : status}).then((events)=>{
+        res.json(events)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
+//get event by status
+router.route("/getEvents/:status").get((req,res)=>{
+    let status = req.params.status;
+    Event.find({eventStatus : status}).then((events)=>{
+        res.json(events)
+    }).catch((err)=>{
+        console.log(err);
     })
 })
 
-//get event by title
-/*router.route("/get/:title").get(async (req, res)=>{
-    let eventTitle = req.params.title;
-    const getEventDetails = await Event.findOne(eventTitle).then((event)=>{
-        res.status(200).send({status: "Event fetched", event});
-    }).catch((err)=>{
-        console.log(err.message);
-        res.status(500).send({status: "Error with get data'", error: err.message});
-    })
-})*/
 
 
 
