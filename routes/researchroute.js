@@ -14,22 +14,16 @@ let mailTransporter = nodemailer.createTransport({
 router.route("/add").post((req,res)=>{
 
     const reviwer_id = req.body.reviwer_id;
-    const reviwer_name = req.body.reviwer_name;
     const research_id = req.body.research_id;
-    const research_topic = req.body.research_topic;
-    const submiteremail = req.body.submiteremail;
-    const reviwe_date = new Date().toLocaleDateString();
+    const submiteremail = req.body.email;
     const reviwe_comment = req.body.reviwe_comment;
     const status = req.body.status;
     const reviwe_point = req.body.reviwe_point;
+    const researchTopic = req.body.researchTopic;
 
     const newResearchreviws = new Reseatchreviws({
         reviwer_id,
-        reviwer_name,
         research_id,
-        research_topic,
-        submiteremail,
-        reviwe_date,
         reviwe_comment,
         status,
         reviwe_point
@@ -38,14 +32,12 @@ router.route("/add").post((req,res)=>{
     newResearchreviws.save().then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
-            to: newResearchreviws.submiteremail,
+            to: submiteremail,
             subject: 'Your Research Review Status',
             text: 'sir/madam,\n\n\n' 
-                    + "Your Research ID: " + newResearchreviws.proposal_id + " \n\n"
-                    + "Your Research Topic: " + newResearchreviws.proposal_topic + " \n\n"
+                    + "Your Research Topic: " + researchTopic + " \n\n"
                     + "Review Status: " + newResearchreviws.status + " \n\n"
                     + "Reviewer's comment: " + newResearchreviws.reviwe_comment + " \n\n"
-                    + "Reviewed by: " + newResearchreviws.reviwer_name + " \n\n\n"
                      
                     + "Thank you for submitting your proposal to THE SLIIT_ICMS!\n\n"                  
         };
@@ -56,7 +48,7 @@ router.route("/add").post((req,res)=>{
                 console.log('Email sent successfully');
             }
         });
-        res.json("Proposal Reviwe Added")
+        res.json("research Reviwe Added")
     }).catch((err)=>{
         console.log(err);
     })
@@ -65,8 +57,7 @@ router.route("/add").post((req,res)=>{
 //Get All The Research reviws.
 router.route("/getresearchreviwe").get((req,res)=>{
 
-    Reseatchreviws.find().populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
-        .then((reseatchreviws) => {
+    Reseatchreviws.find().then((reseatchreviws) => {
         res.json(reseatchreviws)
     }).catch((err)=>{
         console.log(err);
@@ -79,8 +70,7 @@ router.route("/getresearchreviwe/:id").get((req,res)=>{
 
     let researchid = req.params.id;
 
-    Reseatchreviws.findById(researchid).populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
-    .then((reseatchreviws)=>{
+    Reseatchreviws.findById(researchid).then((reseatchreviws)=>{
         res.json(reseatchreviws)
     }).catch((err)=>{
         console.log(err);
@@ -92,7 +82,7 @@ router.route("/getresearchreviwe/:id").get((req,res)=>{
 router.route("/getresearch/:status").get((req,res)=>{
     let status = req.params.status;
 
-    Reseatchreviws.find({ status: status }).populate('Reviwer', '_id first_name last_name email number_Of_reviews password')
+    Reseatchreviws.find({ status: status }).populate('User', '_id  last_name email  password')
         .then((researchreviws) => {
         res.json(researchreviws)
     }).catch((err)=>{

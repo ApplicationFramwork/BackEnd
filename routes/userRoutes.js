@@ -193,7 +193,7 @@ router.route("/getallusers").get((req,res)=>{
 })
 
 //get user details using user email
-router.route("/getuser/:email").get((req,res)=>{
+router.route("/getuser/:id").get((req,res)=>{
 
     let userid = req.params.id;
 

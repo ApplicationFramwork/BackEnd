@@ -66,6 +66,30 @@ router.route("/getresearch/:id").get((req, res) => {
     })
 
 })
+//update Research reviews details using resrarch id
+router.route("/updateresearchdeatails/:id").put(async (req, res) => {
+
+    let researchid = req.params.id;
+    const { research_topic, submiteremail, reseach_description, document, status, total_reviwe_point } = req.body;
+
+    const updateResearchReviwe = {
+        research_topic,
+        submiteremail,
+        reseach_description,
+        document,
+        status,
+        total_reviwe_point
+    }
+
+    const update = await Researchdoc.findByIdAndUpdate(researchid, updateResearchReviwe)
+        .then(() => {
+            res.status(200).send({ status: "research Updated" })
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send({ status: "Error with Updationg data" })
+        })
+
+})
 
 
 

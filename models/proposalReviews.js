@@ -5,16 +5,14 @@ const schema = mongoose.schema;
 const proposalReviewsSchema = new mongoose.Schema({
 
 
-    proposal_id: [{
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-        ref: 'Proposal_Details'
-    }],
-    reviwer_id: [{
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-        ref: 'Reviwer'
-    }],
+    proposal_id: {
+        type: String,
+        required: true
+    },
+    reviwer_id: {
+        type: String,
+        required: true
+    },
     reviwe_comment : {
         type : String,
         required : true
