@@ -52,3 +52,4 @@ server.use("/user", addUserRouter);
 server.use("/researchdoc", researchdocroutes);
 server.use("/proposaldoc", proposaldocroutes);
 
+server.use("/uploads",express.static('uploads'))
