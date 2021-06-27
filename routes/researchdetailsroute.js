@@ -55,6 +55,17 @@ router.route("/getallresearchdocs").get((req, res) => {
         console.log(err)
     })
 })
+//get research details using research id
+router.route("/getresearch/:id").get((req, res) => {
+
+    let researchrid = req.params.id;
+    Researchdoc.findById(researchrid).then((reviwer) => {
+        res.json(reviwer)
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
 
 
 

@@ -192,12 +192,12 @@ router.route("/getallusers").get((req,res)=>{
 
 })
 
-//get user details using user id
-router.route("/getuser/:id").get((req,res)=>{
+//get user details using user email
+router.route("/getuser/:email").get((req,res)=>{
 
     let userid = req.params.id;
 
-    User.findById(reviwerid).then((user)=>{
+    User.findById(userid).then((user)=>{
         res.json(user)
     }).catch((err)=>{
         console.log(err);
