@@ -147,7 +147,7 @@ router.route("/adminAdd").post((req,res)=>{
             to: newWorkshop.organizedBy,
             subject: 'Your Workshop has '+ newWorkshop.eventStatus,
             text: 'Mr./Mrs.,\n\n'
-                + 'Your workshop has been ' + newWorkshop.eventStatus + '\n\n'
+                + 'Your'+ newWorkshop.title +' has been ' + newWorkshop.eventStatus + '\n\n'
                 + "Thank You.\n\n"
         };
         mailTransporter.sendMail(mailDetails, function (err, data) {
@@ -183,7 +183,7 @@ router.route("/adminUpdate/:id").put(async (req, res)=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
             to: updateWorkshop.organizedBy,
-            subject: 'Your Workshop has '+ updateWorkshop.eventStatus,
+            subject: 'Your' + updateWorkshop.title + ' has ' + updateWorkshop.eventStatus,
             text: 'Mr./Mrs.,\n\n'
                 + 'Your workshop has been ' + updateWorkshop.eventStatus + '\n\n'
                 + "Thank You.\n\n"

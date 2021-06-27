@@ -43,6 +43,7 @@ server.use("/proposalreviwe",proposalreviweRouter);
 server.use("/user", addUserRouter);
 server.use("/researchdoc", researchdocroutes);
 server.use("/proposaldoc", proposaldocroutes);
+server.use("/uploads",express.static('uploads'))
 
 server.listen(PORT, () => {
     console.log(`Server is running on port number: ${PORT} `)
