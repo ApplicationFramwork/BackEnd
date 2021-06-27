@@ -1,6 +1,14 @@
 const router = require("express").Router();
 let Workshop = require("../models/Workshop");
+const nodemailer = require('nodemailer');
 
+let mailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'applicationframeworkproject@gmail.com',
+        pass: 'malisha1996'
+    }
+});
 //add a new event
 router.route("/add").post((req,res)=>{
     const title = req.body.title;
@@ -83,11 +91,6 @@ router.route("/existingWorkshop/:id").get(async (req, res)=>{
     }).catch((err)=>{
         console.log(err);
     })
-    /*const eventDetails = await Event.findById(eventId).then((event)=>{
-        res.status(200).send({status: "Event fetched", event});
-    }).catch((err)=>{
-        console.log(err.message);
-        res.status(500).send({status: "Error with get data'", error: err.message});*/
 })
 
 //get all conference events
@@ -98,16 +101,6 @@ router.route("/").get((req,res)=>{
         console.log(err)
     })
 })
-//get conference by title
-/*router.route("/find").post(async(req,res)=>{
-    const {eventType} =req.body;
-    const workshops =await Workshop.find({eventType}).lean();
-    if(!workshops){
-        return res.json({status : 'error', error: 'Invalid Type'});
-    }else{
-        res.json(workshops);
-    }
-})*/
 
 //get confirmed events
 router.route("/getConfirmed").get((req,res)=>{
@@ -126,6 +119,87 @@ router.route("/getEvents/:status").get((req,res)=>{
     }).catch((err)=>{
         console.log(err);
     })
+})
+//admin approve or reject orders and send mail to workshop conductor
+router.route("/adminAdd").post((req,res)=>{
+    const title = req.body.title;
+    const eventType = req.body.eventType;
+    const description = req.body.description;
+    const startDate = req.body.startDate;
+    const duration = req.body.duration;
+    const venue = req.body.venue;
+    const organizedBy = req.body.organizedBy;
+    const eventStatus = req.body.eventStatus;
+
+    const newWorkshop = new Workshop({
+        title,
+        eventType,
+        description,
+        startDate,
+        duration,
+        venue,
+        organizedBy,
+        eventStatus
+    })
+    newWorkshop.save().then(() =>{
+        let mailDetails = {
+            from: 'applicationframeworkproject@gmail.com',
+            to: newWorkshop.organizedBy,
+            subject: 'Your Workshop has '+ newWorkshop.eventStatus,
+            text: 'Mr./Mrs.,\n\n'
+                + 'Your workshop has been ' + newWorkshop.eventStatus + '\n\n'
+                + "Thank You.\n\n"
+        };
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+                res.json("Event Added")
+            }
+        });
+
+    }).catch((err)=>{
+        console.log(err);
+    })
+
+
+})
+//admin update workshop
+router.route("/adminUpdate/:id").put(async (req, res)=>{
+    let workshopId = req.params.id;
+    const {title, eventType, description, startDate, duration, venue, organizedBy,eventStatus} = req.body;
+    const updateWorkshop = {
+        title,
+        eventType,
+        description,
+        startDate,
+        duration,
+        venue,
+        organizedBy,
+        eventStatus
+    }
+    const update = await Workshop.findByIdAndUpdate(workshopId, updateWorkshop).then(()=> {
+        let mailDetails = {
+            from: 'applicationframeworkproject@gmail.com',
+            to: updateWorkshop.organizedBy,
+            subject: 'Your Workshop has '+ updateWorkshop.eventStatus,
+            text: 'Mr./Mrs.,\n\n'
+                + 'Your workshop has been ' + updateWorkshop.eventStatus + '\n\n'
+                + "Thank You.\n\n"
+        };
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+                res.json("Event Updated")
+            }
+        });
+    }).catch((err)=>{
+        console.log(err);
+    })
+
 })
 
 module.exports = router;
