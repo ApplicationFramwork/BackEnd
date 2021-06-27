@@ -54,8 +54,50 @@ router.route("/getallproposaldocs").get((req, res) => {
         console.log(err)
     })
 })
+//get all pending
+router.route("/getpending").get((req, res) => {
+    let statuess = "Pending"
+    Proposaldoc.find({ status: statuess }).then((events => {
+        res.json(events)
+    })).catch((err) => {
+        console.log(err)
+    })
+})
+//get research details using research id
+router.route("/getresearch/:id").get((req, res) => {
 
+    let researchrid = req.params.id;
+    Proposaldoc.findById(researchrid).then((reviwer) => {
+        res.json(reviwer)
+    }).catch((err) => {
+        console.log(err);
+    })
 
+})
+//update Research reviews details using resrarch id
+router.route("/updateresearchdeatails/:id").put(async (req, res) => {
+
+    let researchid = req.params.id;
+    const { proposal_topic, submiteremail, proposal_description, document, status, total_reviwe_point } = req.body;
+
+    const updateResearchReviwe = {
+        proposal_topic,
+        submiteremail,
+        proposal_description,
+        document,
+        status,
+        total_reviwe_point
+    }
+
+    const update = await Proposaldoc.findByIdAndUpdate(researchid, updateResearchReviwe)
+        .then(() => {
+            res.status(200).send({ status: "proposal Updated" })
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send({ status: "Error with Updationg data" })
+        })
+
+})
 
 
 module.exports = router;

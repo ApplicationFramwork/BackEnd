@@ -14,22 +14,16 @@ let mailTransporter = nodemailer.createTransport({
 router.route("/add").post((req,res)=>{
 
     const reviwer_id = req.body.reviwer_id;
-    const reviwer_name = req.body.reviwer_name;
-    const proposal_id = req.body.proposal_id;
-    const proposal_topic = req.body.proposal_topic;
-    const submiteremail = req.body.submiteremail;
-    const reviwe_date = new Date().toLocaleDateString();
+    const Proposal_id = req.body.research_id;
+    const submiteremail = req.body.email;
     const reviwe_comment = req.body.reviwe_comment;
     const status = req.body.status;
     const reviwe_point = req.body.reviwe_point;
+    const researchTopic = req.body.researchTopic;
 
     const newProposalreviws = new Proposalreviws({
         reviwer_id,
-        reviwer_name,
-        proposal_id,
-        proposal_topic,
-        submiteremail,
-        reviwe_date,
+        Proposal_id,
         reviwe_comment,
         status,
         reviwe_point
@@ -38,16 +32,14 @@ router.route("/add").post((req,res)=>{
     newProposalreviws.save().then(()=>{
         let mailDetails = {
             from: 'applicationframeworkproject@gmail.com',
-            to: newProposalreviws.submiteremail,
-            subject: 'Your Proposal Review Status',
-            text: 'sir/madam,\n\n\n' 
-                    + "Your Proposal ID: " + newProposalreviws.proposal_id + " \n\n"
-                    + "Your Proposal Topic: " + newProposalreviws.proposal_topic + " \n\n"
-                    + "Review Status: " + newProposalreviws.status + " \n\n"
-                    + "Reviewer's comment: " + newProposalreviws.reviwe_comment + " \n\n"
-                    + "Reviewed by: " + newProposalreviws.reviwer_name + " \n\n\n"
-                     
-                    + "Thank you for submitting your proposal to THE SLIIT_ICMS!\n\n"                  
+            to: submiteremail,
+            subject: 'Your Research Review Status',
+            text: 'sir/madam,\n\n\n'
+                + "Your Research Topic: " + researchTopic + " \n\n"
+                + "Review Status: " + newProposalreviws.status + " \n\n"
+                + "Reviewer's comment: " + newProposalreviws.reviwe_comment + " \n\n"
+
+                + "Thank you for submitting your proposal to THE SLIIT_ICMS!\n\n"
         };
         mailTransporter.sendMail(mailDetails, function(err, data) {
             if(err) {
@@ -69,6 +61,42 @@ router.route("/getproposalreviws").get((req,res)=>{
         .then((proposalReviws) => {
         res.json(proposalReviws)
     }).catch((err)=>{
+        console.log(err);
+    })
+
+})
+//get  Research review details using research id
+router.route("/getresearchreviwetoupdate/:id").get((req, res) => {
+
+    let researchid = req.params.id;
+
+    Reseatchreviws.find({ research_id: researchid }).then((reseatchreviws) => {
+        res.json(reseatchreviws)
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
+//get approve Proposal review details using reviwer id
+router.route("/getresearchreviwereviwer/:id").get((req, res) => {
+
+    let researchid = req.params.id;
+
+    Reseatchreviws.find({ reviwer_id: researchid, status: "Approved" }).then((reseatchreviws) => {
+        res.json(reseatchreviws)
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
+//get declline proposal review details using reviwer id
+router.route("/getdeclineresearchreviwereviwer/:id").get((req, res) => {
+
+    let researchid = req.params.id;
+
+    Reseatchreviws.find({ reviwer_id: researchid, status: "Decline" }).then((reseatchreviws) => {
+        res.json(reseatchreviws)
+    }).catch((err) => {
         console.log(err);
     })
 
@@ -103,15 +131,11 @@ router.route("/getproposalreviws/:id").get((req,res)=>{
 router.route("/updateProposalReview/:id").put(async(req,res)=>{
 
     let proposalid = req.params.id;
-    const {reviwer_id, reviwer_name, proposal_id, proposal_topic, submiteremail, reviwe_date, reviwe_comment, status, reviwe_point} = req.body;
+    const { reviwer_id, Proposal_id, reviwe_comment, status, reviwe_point} = req.body;
 
     const updateProposalReviwe = {
         reviwer_id,
-        reviwer_name,
-        proposal_id,
-        proposal_topic,
-        submiteremail,
-        reviwe_date,
+        Proposal_id,
         reviwe_comment,
         status,
         reviwe_point
@@ -119,27 +143,6 @@ router.route("/updateProposalReview/:id").put(async(req,res)=>{
 
     const update = await Proposalreviws.findByIdAndUpdate(proposalid, updateProposalReviwe)
     .then(()=>{
-        let mailDetails = {
-            from: 'applicationframeworkproject@gmail.com',
-            to: updateProposalReviwe.submiteremail,
-            subject: 'Your Proposal Review Status Updated',
-            text: 'sir/madam,\n\n\n' 
-                    + "Your Research ID: " + updateProposalReviwe.research_id + " \n\n"
-                    + "Your Research Topic: " + updateProposalReviwe.research_topic + " \n\n"
-                    + "Review Status: " + updateProposalReviwe.status + " \n\n"
-                    + "Reviewer's comment: " + updateProposalReviwe.reviwe_comment + " \n\n"
-                    + "Reviewed by: " + updateProposalReviwe.reviwer_name + " \n\n\n"
-                     
-                    + "Thank you for submitting your proposal to THE SLIIT_ICMS!\n\n"                  
-                       
-        };
-        mailTransporter.sendMail(mailDetails, function(err, data) {
-            if(err) {
-                console.log('Error Occurs');
-            } else {
-                console.log('Email sent successfully');
-            }
-        });
         res.status(200).send({status: "proposal reviwe Updated"})
     }).catch((err)=>{
         console.log(err);

@@ -55,6 +55,15 @@ router.route("/getallresearchdocs").get((req, res) => {
         console.log(err)
     })
 })
+//get all pending
+router.route("/getpending").get((req, res) => {
+    let statuess = "Pending"
+    Researchdoc.find({ status: statuess}).then((events => {
+        res.json(events)
+    })).catch((err) => {
+        console.log(err)
+    })
+})
 //get research details using research id
 router.route("/getresearch/:id").get((req, res) => {
 
