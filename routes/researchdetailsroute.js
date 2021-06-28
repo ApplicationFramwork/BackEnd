@@ -2,7 +2,15 @@ const router = require("express").Router();
 let Researchdoc = require("../models/researchdetails");
 const path = require('path');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 
+let mailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'applicationframeworkproject@gmail.com',
+        pass: 'malisha1996'
+    }
+});
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -92,6 +100,7 @@ router.route("/updateresearchdeatails/:id").put(async (req, res) => {
 
     const update = await Researchdoc.findByIdAndUpdate(researchid, updateResearchReviwe)
         .then(() => {
+            
             res.status(200).send({ status: "research Updated" })
         }).catch((err) => {
             console.log(err);
