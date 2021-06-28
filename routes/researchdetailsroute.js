@@ -2,6 +2,15 @@ const router = require("express").Router();
 let Researchdoc = require("../models/researchdetails");
 const path = require('path');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
+
+let mailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'applicationframeworkproject@gmail.com',
+        pass: 'malisha1996'
+    }
+});
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -53,6 +62,51 @@ router.route("/getallresearchdocs").get((req, res) => {
     })).catch((err) => {
         console.log(err)
     })
+})
+//get all pending
+router.route("/getpending").get((req, res) => {
+    let statuess = "Pending"
+    Researchdoc.find({ status: statuess}).then((events => {
+        res.json(events)
+    })).catch((err) => {
+        console.log(err)
+    })
+})
+//get research details using research id
+router.route("/getresearch/:id").get((req, res) => {
+
+    let researchrid = req.params.id;
+    Researchdoc.findById(researchrid).then((reviwer) => {
+        res.json(reviwer)
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
+//update Research reviews details using resrarch id
+router.route("/updateresearchdeatails/:id").put(async (req, res) => {
+
+    let researchid = req.params.id;
+    const { research_topic, submiteremail, reseach_description, document, status, total_reviwe_point } = req.body;
+
+    const updateResearchReviwe = {
+        research_topic,
+        submiteremail,
+        reseach_description,
+        document,
+        status,
+        total_reviwe_point
+    }
+
+    const update = await Researchdoc.findByIdAndUpdate(researchid, updateResearchReviwe)
+        .then(() => {
+            
+            res.status(200).send({ status: "research Updated" })
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send({ status: "Error with Updationg data" })
+        })
+
 })
 
 

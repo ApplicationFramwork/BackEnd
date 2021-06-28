@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const server = express();
 require("dotenv").config();
-const PORT = process.env.PORT || 8070;
+const PORT = process.env.PORT || 5000;
 
 //server middleware
 server.use(cors());
@@ -33,6 +33,8 @@ const proposalreviweRouter = require("./routes/proposalroute.js");
 const addUserRouter = require("./routes/userRoutes");
 const researchdocroutes = require("./routes/researchdetailsroute");
 const proposaldocroutes = require("./routes/proposaldetailsroute");
+const paymentRouter = require("./routes/payment");
+
 
 server.use("/event",eventRouter);
 server.use("/workshop",workshopRouter);
@@ -44,6 +46,7 @@ server.use("/user", addUserRouter);
 server.use("/researchdoc", researchdocroutes);
 server.use("/proposaldoc", proposaldocroutes);
 server.use("/uploads",express.static('uploads'))
+server.use("/payment", paymentRouter);
 
 server.listen(PORT, () => {
     console.log(`Server is running on port number: ${PORT} `)

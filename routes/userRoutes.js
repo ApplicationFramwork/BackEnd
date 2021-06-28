@@ -349,5 +349,57 @@ router.route("/login").post(async (req,res )=>{
     )
     return res.json({status : 'ok' , token : token})
 })
+//create a user
+router.route("/addStaff").post(async (req,res)=>{
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
+    const password = req.body.password;
+    const type = req.body.type;
+    const number = req.body.number;
+    const email = req.body.email;
+
+    let newStaff = User({
+        first_name,
+        last_name,
+        password,
+        type,
+        number,
+        email
+    })
+
+    newStaff.save().then(() => {
+        let mailDetails = {
+            from: 'applicationframeworkproject@gmail.com',
+            to: newStaff.email,
+            subject: 'YOU SIGN UP AS ' + newStaff.type + ' IN SLIIT-ICMS',
+            text: 'Mr./Mrs.,\n\n'
+                + "Congratulations!\n\n"
+                + 'Successfully, You added as a ' + newStaff.type + ' in SLIIT ICMS\n\n'
+                + "You Email is " + newStaff.email + " \n\n"
+                + "You password is " + newStaff.password + " \n\n"
+                + "Thank You.\n\n"
+        };
+        mailTransporter.sendMail(mailDetails, function (err, data) {
+            if (err) {
+                console.log('Error Occurs');
+            } else {
+                console.log('Email sent successfully');
+            }
+        });
+        res.json("User Added")
+    }).catch((err) => {
+        console.log(err);
+    })
+
+
+})
+router.route("/getUsersByType/:type").get((req,res)=>{
+    let type = req.params.type;
+    User.find({type : type}).then((users)=>{
+        res.json(users)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
 
 module.exports = router;
