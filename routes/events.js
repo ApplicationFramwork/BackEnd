@@ -84,11 +84,6 @@ router.route("/get/:id").get(async (req, res)=>{
         }).catch((err)=>{
             console.log(err);
         })
-    /*const eventDetails = await Event.findById(eventId).then((event)=>{
-        res.status(200).send({status: "Event fetched", event});
-    }).catch((err)=>{
-        console.log(err.message);
-        res.status(500).send({status: "Error with get data'", error: err.message});*/
 
 })
 
